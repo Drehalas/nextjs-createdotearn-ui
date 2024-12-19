@@ -21,6 +21,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
 import useChatStore from "./hooks/useChatStore";
+import sendRequest from "./api";
 
 export default function Home() {
   const {
@@ -104,43 +105,9 @@ export default function Home() {
     addMessage({ role: "user", content: input, id: chatId });
     setInput("");
 
-    if (ollama) {
-      try {
-        const parser = new BytesOutputParser();
-
-        const stream = await ollama
-          .pipe(parser)
-          .stream(
-            (messages as Message[]).map((m) =>
-              m.role == "user"
-                ? new HumanMessage(m.content)
-                : new AIMessage(m.content)
-            )
-          );
-
-        const decoder = new TextDecoder();
-
-        let responseMessage = "";
-        for await (const chunk of stream) {
-          const decodedChunk = decoder.decode(chunk);
-          responseMessage += decodedChunk;
-          setLoadingSubmit(false);
-          setMessages([
-            ...messages,
-            { role: "assistant", content: responseMessage, id: chatId },
-          ]);
-        }
-        addMessage({ role: "assistant", content: responseMessage, id: chatId });
-        setMessages([...messages]);
-
-        localStorage.setItem(`chat_${chatId}`, JSON.stringify(messages));
-        // Trigger the storage event to update the sidebar component
-        window.dispatchEvent(new Event("storage"));
-      } catch (error) {
-        toast.error("An error occurred. Please try again.");
-        setLoadingSubmit(false);
-      }
-    }
+    const res = await sendRequest(input)
+    addMessage({ role: "assistant", content: res, id: chatId });
+    setMessages([...messages])
   };
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -173,15 +140,8 @@ export default function Home() {
 
     messages.slice(0, -1)
     
-
-    if (env === "production") {
-      handleSubmitProduction(e);
-      setBase64Images(null)
-    } else {
-      // Call the handleSubmit function with the options
-      handleSubmit(e, requestOptions);
-      setBase64Images(null)
-    }
+    handleSubmitProduction(e);
+    setBase64Images(null)
   };
 
   const onOpenChange = (isOpen: boolean) => { 
