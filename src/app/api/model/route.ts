@@ -1,5 +1,14 @@
 export async function POST(req: Request) {
-    const { name } = await req.json();
+    try {
+        const { query  } = await req.json();
+
+        if (!query) {
+            return new Response(
+                JSON.stringify({ error: "The 'query' field is required." }),
+                { status: 400, headers: { "Content-Type": "application/json" } }
+            );
+        }
+
 
     const solanaApiUrl = "https://solanaaihackathon.onrender.com/api/v1/chat"; // New API endpoint
 
@@ -8,13 +17,14 @@ export async function POST(req: Request) {
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name }),
+        body: JSON.stringify({ query  }),
     });
 
+    // Check if the response is successful
     if (!response.ok) {
         return new Response(
             JSON.stringify({ error: "Failed to connect to Solana API" }),
-            { status: response.status }
+            { status: response.status, headers: { "Content-Type": "application/json" } }
         );
     }
     // Create a new ReadableStream from the response body
@@ -49,4 +59,12 @@ export async function POST(req: Request) {
     const headers = new Headers(response.headers);
     headers.set("Content-Type", "application/json");
     return new Response(stream, { headers });
+    }catch (error) {
+        console.error("Error in POST /api/v1/chat route:", error);
+        // @ts-ignore
+        return new Response(
+            JSON.stringify({ error: "Internal Server Error", details: error.message }),
+            { status: 500, headers: { "Content-Type": "application/json" } }
+        );
+    }
 }
