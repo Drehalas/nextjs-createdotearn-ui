@@ -1,13 +1,22 @@
 export async function POST(req: Request) {
     const { name } = await req.json();
 
-    const ollamaUrl = process.env.NEXT_PUBLIC_OLLAMA_URL || "http://localhost:11434";
+    const solanaApiUrl = "https://solanaaihackathon.onrender.com/api/v1/chat"; // New API endpoint
 
-    const response = await fetch(ollamaUrl + "/api/pull", {
+    const response = await fetch(solanaApiUrl, {
         method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
         body: JSON.stringify({ name }),
     });
 
+    if (!response.ok) {
+        return new Response(
+            JSON.stringify({ error: "Failed to connect to Solana API" }),
+            { status: response.status }
+        );
+    }
     // Create a new ReadableStream from the response body
     const stream = new ReadableStream({
         start(controller) {
