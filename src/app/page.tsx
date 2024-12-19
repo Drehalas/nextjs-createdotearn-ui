@@ -112,7 +112,7 @@ export default function Home() {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoadingSubmit(true);
+    setLoadingSubmit(false);
 
     setMessages([...messages]);
 
