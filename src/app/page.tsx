@@ -100,12 +100,14 @@ export default function Home() {
       addMessage({ role: "assistant", content: res, id: chatId });
       setMessages([...messages])
     }else{
-      if(res.agent_action == "swap"){
-        const instruction = await tradeWithJupiter((res.parameters as JupiterTradeParams),"")
-        const transaction = new Transaction();
-        transaction.add(instruction);
-        const signature = await sendTransaction(transaction, connection);
-        console.log(`Transaction signature: ${signature}`);
+      if(res.agent_action == "swap" && publicKey){
+        try{
+          const instruction = await tradeWithJupiter((res.parameters as JupiterTradeParams),publicKey,connection)
+          const signature = await sendTransaction(instruction, connection);
+          console.log(`Transaction signature: ${signature}`);
+        }catch(error:any){
+          console.log(error)
+        }
       }
     }
   };
