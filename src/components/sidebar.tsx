@@ -127,11 +127,10 @@ export function Sidebar({
           <div className="flex gap-3 items-center ">
             {!isCollapsed && !isMobile && (
               <Image
-                src="/ollama.png"
+                src="/cr8AIchan.png"
                 alt="AI"
                 width={28}
                 height={28}
-                className="dark:invert hidden 2xl:block"
               />
             )}
             New chat

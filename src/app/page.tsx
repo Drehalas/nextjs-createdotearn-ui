@@ -52,7 +52,7 @@ export default function Home() {
     getSelectedModel()
   );
   const [open, setOpen] = React.useState(false);
-  const [ollama, setOllama] = useState<ChatOllama>();
+  const [cr8AI, setCr8AI] = useState<ChatOllama>();
   const [balance, setBalance] = useState(0);
   const { connection } = useConnection();
   const { publicKey, sendTransaction } = useWallet();
@@ -73,7 +73,7 @@ export default function Home() {
 
   useEffect(()=>{
     if(publicKey){
-      localStorage.setItem("ollama_user", publicKey?.toString())
+      localStorage.setItem("ollama_user", publicKey?.toString() as string)
     }else{
       setOpen(true)
     }
@@ -85,7 +85,7 @@ export default function Home() {
     setMessages([...messages]);
   };
 
-  // Function to handle chatting with Ollama in production (client side)
+  // Function to handle chatting with cr8AI in production (client side)
   const handleSubmitProduction = async (
     e: React.FormEvent<HTMLFormElement>
   ) => {
@@ -175,7 +175,7 @@ export default function Home() {
         />
         <DialogContent className="flex flex-col space-y-4">
           <DialogHeader className="space-y-2">
-            <DialogTitle>Welcome to Ollama!</DialogTitle>
+            <DialogTitle>Welcome to cr8AI!</DialogTitle>
             <DialogDescription>
               Let's connect the wallet
             </DialogDescription>
