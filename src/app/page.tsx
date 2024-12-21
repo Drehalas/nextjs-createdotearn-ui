@@ -1,7 +1,6 @@
 "use client";
 
 import { ChatLayout } from "@/components/chat/chat-layout";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogDescription,
@@ -9,12 +8,9 @@ import {
   DialogTitle,
   DialogContent,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import UsernameForm from "@/components/username-form";
 import { getSelectedModel } from "@/lib/model-helper";
 import { ChatOllama } from "@langchain/community/chat_models/ollama";
-import { AIMessage, HumanMessage } from "@langchain/core/messages";
-import { BytesOutputParser } from "@langchain/core/output_parsers";
 import { Attachment, ChatRequestOptions } from "ai";
 import { Message, useChat } from "ai/react";
 import React, { useEffect, useRef, useState } from "react";
@@ -22,6 +18,11 @@ import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
 import useChatStore from "./hooks/useChatStore";
 import sendRequest from "./api";
+import tradeWithJupiter, { JupiterTradeParams } from "./api/tradeWithJupiter";
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
+import '@solana/wallet-adapter-react-ui/styles.css';
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { Transaction } from "@solana/web3.js";
 
 export default function Home() {
   const {
@@ -52,6 +53,9 @@ export default function Home() {
   );
   const [open, setOpen] = React.useState(false);
   const [ollama, setOllama] = useState<ChatOllama>();
+  const [balance, setBalance] = useState(0);
+  const { connection } = useConnection();
+  const { publicKey, sendTransaction } = useWallet();
   const env = process.env.NODE_ENV;
   const [loadingSubmit, setLoadingSubmit] = React.useState(false);
   const formRef = useRef<HTMLFormElement>(null);
@@ -67,28 +71,13 @@ export default function Home() {
     }
   }, [messages]);
 
-  React.useEffect(() => {
-    if (!isLoading && !error && chatId && messages.length > 0) {
-      // Save messages to local storage
-      localStorage.setItem(`chat_${chatId}`, JSON.stringify(messages));
-      // Trigger the storage event to update the sidebar component
-      window.dispatchEvent(new Event("storage"));
+  useEffect(()=>{
+    if(publicKey){
+      localStorage.setItem("ollama_user", publicKey?.toString())
+    }else{
+      setOpen(true)
     }
-  }, [chatId, isLoading, error]);
-
-  useEffect(() => {
-    if (env === "production") {
-      const newOllama = new ChatOllama({
-        baseUrl: process.env.NEXT_PUBLIC_OLLAMA_URL || "http://localhost:11434",
-        model: selectedModel,
-      });
-      setOllama(newOllama);
-    }
-
-    if (!localStorage.getItem("ollama_user")) {
-      setOpen(true);
-    }
-  }, [selectedModel]);
+  },[publicKey])
 
   const addMessage = (Message: Message) => {
     messages.push(Message);
@@ -105,9 +94,20 @@ export default function Home() {
     addMessage({ role: "user", content: input, id: chatId });
     setInput("");
 
-    const res = await sendRequest(input)
-    addMessage({ role: "assistant", content: res, id: chatId });
-    setMessages([...messages])
+    let res = await sendRequest(input)
+    if (typeof res === "string") {
+      res = res.slice(1,-1)
+      addMessage({ role: "assistant", content: res, id: chatId });
+      setMessages([...messages])
+    }else{
+      if(res.agent_action == "swap"){
+        const instruction = await tradeWithJupiter((res.parameters as JupiterTradeParams),"")
+        const transaction = new Transaction();
+        transaction.add(instruction);
+        const signature = await sendTransaction(transaction, connection);
+        console.log(`Transaction signature: ${signature}`);
+      }
+    }
   };
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -177,10 +177,9 @@ export default function Home() {
           <DialogHeader className="space-y-2">
             <DialogTitle>Welcome to Ollama!</DialogTitle>
             <DialogDescription>
-              Enter your name to get started. This is just to personalize your
-              experience.
+              Let's connect the wallet
             </DialogDescription>
-            <UsernameForm setOpen={setOpen} />
+            <WalletMultiButton style={{}} />
           </DialogHeader>
         </DialogContent>
       </Dialog>

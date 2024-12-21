@@ -10,7 +10,7 @@ interface ParsedMessage {
     parameters: Record<string, any>;
 }
 
-const sendRequest = async (message:string): Promise<string> => {
+const sendRequest = async (message:string): Promise<string | ParsedMessage> => {
     try {
         const solanaApiUrl = "https://solanaaihackathon.onrender.com/api/v1/chat"; // New API endpoint
         const response = await fetch(solanaApiUrl, {
@@ -29,10 +29,8 @@ const sendRequest = async (message:string): Promise<string> => {
             return "Failed to connect to Solana API";
         }
 
-        const apiResponse: ApiResponse = await response.json();
-        const processedResponse = processApiResponse(apiResponse);
-
-        return JSON.stringify(processedResponse);
+        const apiResponse: ParsedMessage = await response.json();
+        return  processApiResponse(apiResponse);
     } catch (error) {
         console.error("Error in POST /api/v1/chat route:", error);
         // @ts-ignore
@@ -43,14 +41,13 @@ const sendRequest = async (message:string): Promise<string> => {
     }
 }
 
-const processApiResponse = (apiResponse: ApiResponse): string | Record<string, any> => {
+const processApiResponse = (apiResponse: ParsedMessage): ParsedMessage | string => {
     try {
-        const outerMessage: ParsedMessage = JSON.parse(apiResponse.message);
-        const parameters = outerMessage.parameters;
+        const parameters = apiResponse.parameters;
         if ("message" in parameters) {
             return parameters.message;
         } else {
-            return parameters;
+            return apiResponse;
         }
     } catch (error) {
         console.error("Error parsing API response:", error);
