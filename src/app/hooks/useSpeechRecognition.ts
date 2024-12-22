@@ -57,7 +57,7 @@ const useSpeechToText = (options: SpeechRecognitionOptions = {}) => {
         recognitionRef.current.stop();
       }
     };
-  }, []);
+  }, [options.interimResults, options.lang, options.continuous]); // Added dependencies
 
   const startListening = () => {
     if (recognitionRef.current && !isListening) {
