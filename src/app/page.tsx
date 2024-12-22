@@ -20,9 +20,9 @@ import useChatStore from "./hooks/useChatStore";
 import sendRequest from "./api";
 import tradeWithJupiter, { JupiterTradeParams } from "./api/tradeWithJupiter";
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
-import '@solana/wallet-adapter-react-ui/styles.css';
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { Transaction } from "@solana/web3.js";
+import "@/styles/wallet.css";
 
 export default function Home() {
   const {
@@ -176,10 +176,10 @@ export default function Home() {
         <DialogContent className="flex flex-col space-y-4">
           <DialogHeader className="space-y-2">
             <DialogTitle>Welcome to cr8AI!</DialogTitle>
-            <DialogDescription>
+            <DialogDescription  >
               Let's connect the wallet
             </DialogDescription>
-            <WalletMultiButton style={{}} />
+            <WalletMultiButton className="custom-wallet-button"/>
           </DialogHeader>
         </DialogContent>
       </Dialog>
