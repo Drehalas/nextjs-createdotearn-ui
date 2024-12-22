@@ -1,29 +1,27 @@
-
 import { CoreMessage } from "ai";
 import { create } from "zustand";
 
-interface State {
-  base64Images: string[] | null;
-  messages: CoreMessage[];
+interface ChatState {
+    base64Images: string[] | null;
+    messages: CoreMessage[];
 }
 
-interface Actions {
-  setBase64Images: (base64Images: string[] | null) => void;
-  setMessages: (
-    fn: (
-      messages: CoreMessage[]
-    ) => CoreMessage[]
-  ) => void;
+interface ChatActions {
+    setBase64Images: (images: string[] | null) => void;
+    updateMessages: (updateFn: (messages: CoreMessage[]) => CoreMessage[]) => void;
 }
 
-const useChatStore = create<State & Actions>()(
-  (set) => ({
+const useChatStore = create<ChatState & ChatActions>((set) => ({
+    // Initial state
     base64Images: null,
-    setBase64Images: (base64Images) => set({ base64Images }),
-
     messages: [],
-    setMessages: (fn) => set((state) => ({ messages: fn(state.messages) })),
-  })
-)
+
+    // Actions
+    setBase64Images: (images) => set({ base64Images: images }),
+    updateMessages: (updateFn) =>
+        set((state) => ({
+            messages: updateFn(state.messages),
+        })),
+}));
 
 export default useChatStore;

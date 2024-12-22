@@ -20,9 +20,9 @@ import useChatStore from "./hooks/useChatStore";
 import sendRequest from "./api";
 import tradeWithJupiter, { JupiterTradeParams } from "./api/tradeWithJupiter";
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
-import '@solana/wallet-adapter-react-ui/styles.css';
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { Transaction } from "@solana/web3.js";
+import "@/styles/wallet.css";
 
 export default function Home() {
   const {
@@ -52,7 +52,7 @@ export default function Home() {
     getSelectedModel()
   );
   const [open, setOpen] = React.useState(false);
-  const [ollama, setOllama] = useState<ChatOllama>();
+  const [cr8AI, setCr8AI] = useState<ChatOllama>();
   const [balance, setBalance] = useState(0);
   const { connection } = useConnection();
   const { publicKey, sendTransaction } = useWallet();
@@ -73,7 +73,7 @@ export default function Home() {
 
   useEffect(()=>{
     if(publicKey){
-      localStorage.setItem("ollama_user", publicKey?.toString())
+      localStorage.setItem("ollama_user", publicKey?.toString() as string)
     }else{
       setOpen(true)
     }
@@ -85,7 +85,7 @@ export default function Home() {
     setMessages([...messages]);
   };
 
-  // Function to handle chatting with Ollama in production (client side)
+  // Function to handle chatting with cr8AI in production (client side)
   const handleSubmitProduction = async (
     e: React.FormEvent<HTMLFormElement>
   ) => {
@@ -177,11 +177,11 @@ export default function Home() {
         />
         <DialogContent className="flex flex-col space-y-4">
           <DialogHeader className="space-y-2">
-            <DialogTitle>Welcome to Ollama!</DialogTitle>
-            <DialogDescription>
-              Let's connect the wallet
+            <DialogTitle>Welcome to cr8AI!</DialogTitle>
+            <DialogDescription  >
+              Let&apos;s connect the wallet
             </DialogDescription>
-            <WalletMultiButton style={{}} />
+            <WalletMultiButton className="custom-wallet-button"/>
           </DialogHeader>
         </DialogContent>
       </Dialog>

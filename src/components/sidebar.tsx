@@ -85,9 +85,16 @@ export function Sidebar({
     // Map through the chats and return an object with chatId and messages
     const chatObjects = chats.map((chat) => {
       const item = localStorage.getItem(chat);
-      return item
-        ? { chatId: chat, messages: JSON.parse(item) }
-        : { chatId: "", messages: [] };
+      try {
+        // Try to parse the data if it exists
+        return item
+            ? { chatId: chat, messages: JSON.parse(item) }
+            : { chatId: chat, messages: [] };
+      } catch (error) {
+        // Log the error and return fallback for invalid JSON
+        console.error(`Invalid JSON for chatId: ${chat}`, error);
+        return { chatId: chat, messages: [] };
+      }
     });
 
     // Sort chats by the createdAt date of the first message of each chat
@@ -127,11 +134,10 @@ export function Sidebar({
           <div className="flex gap-3 items-center ">
             {!isCollapsed && !isMobile && (
               <Image
-                src="/ollama.png"
+                src="/cr8AIchan.png"
                 alt="AI"
                 width={28}
                 height={28}
-                className="dark:invert hidden 2xl:block"
               />
             )}
             New chat
