@@ -177,7 +177,7 @@ export default function Home() {
           <DialogHeader className="space-y-2">
             <DialogTitle>Welcome to cr8AI!</DialogTitle>
             <DialogDescription  >
-              Let's connect the wallet
+              Let&apos;s connect the wallet
             </DialogDescription>
             <WalletMultiButton className="custom-wallet-button"/>
           </DialogHeader>
