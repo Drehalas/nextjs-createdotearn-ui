@@ -1,130 +1,74 @@
-<div align="center">
-  <img src="ollama-nextjs-ui.gif">
-</div>
+# Cr8AI
 
-<h1 align="center">
-  Fully-featured & beautiful web interface for Ollama LLMs
-</h1>
+Cr8AI is an innovative web application designed to simplify stablecoins and amplify rewards, offering a seamless and secure user experience for cryptocurrency enthusiasts.
 
-<div align="center">
-  
-![GitHub Repo stars](https://img.shields.io/github/stars/jakobhoeg/nextjs-ollama-llm-ui)
-  
-</div>
+## Features
 
+- **Wallet Integration**: Connect your Solana-compatible wallets (Phantom, Trust, Magic Eden, etc.) effortlessly.
+- **Responsive UI**: Modern and intuitive interface designed for both desktop and mobile devices.
+- **Chat Integration**: Interact with Cr8AI using a sophisticated chatbot powered by LangChain.
+- **Real-time Transactions**: Execute trades and swaps securely using Jupiter integration.
 
-Get up and running with Large Language Models **quickly**, **locally** and even **offline**.
-This project aims to be the easiest way for you to get started with LLMs. No tedious and annoying setup required!
+## Tech Stack
 
-# Features ✨
+- **Frontend**: Next.js, Tailwind CSS
+- **Wallet Integration**: Solana Wallet Adapter
+- **Backend**: Node.js, API integrations
+- **Blockchain**: Solana Network
+- **Styling**: Custom CSS for enhanced UI experience
 
-- **Beautiful & intuitive UI:** Inspired by ChatGPT, to enhance similarity in the user experience.
-- **Fully local:** Stores chats in localstorage for convenience. No need to run a database.
-- **Fully responsive:** Use your phone to chat, with the same ease as on desktop.
-- **Easy setup:** No tedious and annoying setup required. Just clone the repo and you're good to go!
-- **Code syntax highligting:** Messages that include code, will be highlighted for easy access.
-- **Copy codeblocks easily:** Easily copy the highlighted code with one click.
-- **Download/Pull & Delete models:** Easily download and delete models directly from the interface.
-- **Switch between models:** Switch between models fast with a click.
-- **Chat history:** Chats are saved and easily accessed.
-- **Light & Dark mode:** Switch between light & dark mode.
+## Installation
 
-# Requisites ⚙️
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd cr8ai
+   ```
 
-To use the web interface, these requisites must be met:
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-1. Download [Ollama](https://ollama.com/download) and have it running. Or run it in a Docker container. Check the [docs](https://github.com/ollama/ollama) for instructions.
-2. Node.js (18+) and npm is required. [Download](https://nodejs.org/en/download)
+3. Set up environment variables:
+   Create a `.env` file with the following values:
+   ```env
+   NEXT_PUBLIC_SOLANA_NETWORK=devnet
+   NEXT_PUBLIC_RPC_ENDPOINT=https://api.devnet.solana.com
+   ```
 
-# Deploy your own to Vercel or Netlify in one click ✨
+4. Run the development server:
+   ```bash
+   npm run dev
+   ```
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fjakobhoeg%2Fnextjs-ollama-llm-ui&env=NEXT_PUBLIC_OLLAMA_URL&envDescription=Your%20Ollama%20URL) [![Deploy to Netlify Button](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/jakobhoeg/nextjs-ollama-llm-ui)
+5. Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-You'll need to set your [OLLAMA_ORIGINS](https://github.com/ollama/ollama/blob/main/docs/faq.md) environment variable on your machine that is running Ollama:
+## How to Use
 
-```
-OLLAMA_ORIGINS="https://your-app.vercel.app/"
-```
+1. **Connect a Wallet**: Click the "Select Wallet" button to connect your Solana-compatible wallet.
+2. **Chat with Cr8AI**: Use the chatbot to interact and make requests.
+3. **Execute Transactions**: Perform real-time swaps and trades using the integrated Jupiter protocol.
+4. **Customize UI**: Personalize themes and layouts via the settings panel.
 
-# Installation 📖
+## Development Notes
 
-[![Packaging status](https://repology.org/badge/vertical-allrepos/nextjs-ollama-llm-ui.svg?columns=3)](https://repology.org/project/nextjs-ollama-llm-ui/versions)
+- Ensure that the Solana Wallet Adapter libraries are correctly installed and imported.
+- Custom CSS has been applied to override default wallet styles in `wallet.css`.
+- The project follows conventional commit standards for Git messages.
 
-Use a pre-build package from one of the supported package managers to run a local environment of the web interface.
-Alternatively you can install from source with the instructions below.
+## Contributing
 
-> [!NOTE]  
-> If your frontend runs on something other than `http://localhost` or `http://127.0.0.1`, you'll need to set the OLLAMA_ORIGINS to your frontend url.
->
-> This is also stated in the [documentation](https://github.com/ollama/ollama/blob/main/docs/faq.md#how-do-i-configure-ollama-server):
-> 
-> `Ollama allows cross-origin requests from 127.0.0.1 and 0.0.0.0 by default. Additional origins can be configured with OLLAMA_ORIGINS`
+We welcome contributions! Please fork the repository and create a pull request with your changes. Make sure to adhere to the project's coding standards and test your features thoroughly.
 
-## Install from source
+## License
 
-**1. Clone the repository to a directory on your pc via command prompt:**
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-```
-git clone https://github.com/jakobhoeg/nextjs-ollama-llm-ui
-```
+## Contact
 
-**2. Open the folder:**
+For questions or feedback, reach out to us at **support@cr8ai.com**.
 
-```
-cd nextjs-ollama-llm-ui
-```
+---
 
-**3. Rename the `.example.env` to `.env`:**
-
-```
-mv .example.env .env
-```
-
-**4. If your instance of Ollama is NOT running on the default ip-address and port, change the variable in the .env file to fit your usecase:**
-
-```
-NEXT_PUBLIC_OLLAMA_URL="http://localhost:11434"
-```
-
-**5. Install dependencies:**
-
-```
-npm install
-```
-
-**6. Start the development server:**
-
-```
-npm run dev
-```
-
-**5. Go to [localhost:3000](http://localhost:3000) and start chatting with your favourite model!**
-
-# Upcoming features
-
-This is a to-do list consisting of upcoming features.
-- ✅ Voice input support
-- ✅ Code syntax highlighting
-- ✅ Ability to send an image in the prompt to utilize vision language models.
-- ✅ Ability to regenerate responses
-- ⬜️ Import and export chats
-
-# Tech stack
-
-[NextJS](https://nextjs.org/) - React Framework for the Web
-
-[TailwindCSS](https://tailwindcss.com/) - Utility-first CSS framework
-
-[shadcn-ui](https://ui.shadcn.com/) - UI component built using Radix UI and Tailwind CSS
-
-[shadcn-chat](https://github.com/jakobhoeg/shadcn-chat) - Chat components for NextJS/React projects
-
-[Framer Motion](https://www.framer.com/motion/) - Motion/animation library for React
-
-[Lucide Icons](https://lucide.dev/) - Icon library
-
-# Helpful links
-
-[Medium Article](https://medium.com/@bartek.lewicz/launch-your-own-chatgpt-clone-for-free-on-colab-shareable-and-online-in-less-than-10-minutes-da19e44be5eb) - How to launch your own ChatGPT clone for free on Google Colab. By Bartek Lewicz.
-
-[Lobehub mention](https://lobehub.com/blog/5-ollama-web-ui-recommendation#5-next-js-ollama-llm-ui) - Five Excellent Free Ollama WebUI Client Recommendations
+We’re excited to see how Cr8AI can simplify and amplify your crypto experience!
