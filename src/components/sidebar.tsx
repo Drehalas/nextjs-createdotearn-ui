@@ -134,7 +134,7 @@ export function Sidebar({
           <div className="flex gap-3 items-center ">
             {!isCollapsed && !isMobile && (
               <Image
-                src="/cr8AIchan.png"
+                src="/rektAIchanV2.png"
                 alt="AI"
                 width={28}
                 height={28}

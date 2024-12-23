@@ -77,57 +77,66 @@ export default function ChatTopbar({
   };
 
   return (
-    <div className="w-full flex px-4 py-6  items-center justify-between lg:justify-center ">
-      <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-        <SheetTrigger>
-          <HamburgerMenuIcon className="lg:hidden w-5 h-5" />
-        </SheetTrigger>
-        <SheetContent side="left">
-          <Sidebar
-            chatId={chatId || ""}
-            isCollapsed={false}
-            isMobile={false}
-            messages={messages}
-            setMessages={setMessages}
-            closeSidebar={handleCloseSidebar} 
-          />
-        </SheetContent>
-      </Sheet>
+      <div className="w-full flex px-4 py-6  items-center justify-between lg:justify-center ">
+        <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+          <SheetTrigger>
+            <HamburgerMenuIcon className="lg:hidden w-5 h-5"/>
+          </SheetTrigger>
+          <SheetContent side="left">
+            <Sidebar
+                chatId={chatId || ""}
+                isCollapsed={false}
+                isMobile={false}
+                messages={messages}
+                setMessages={setMessages}
+                closeSidebar={handleCloseSidebar}
+            />
+          </SheetContent>
+        </Sheet>
+        <div className="ml-auto flex items-center space-x-4">
+          {/* Add your image here */}
 
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            disabled={isLoading}
-            variant="outline"
-            role="combobox"
-            aria-expanded={open}
-            className="w-[300px] justify-between"
-          >
-            {currentModel || "Select model"}
-            <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-[300px] p-1">
-          {models.length > 0 ? (
-            models.map((model) => (
+          <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger asChild>
               <Button
-                key={model}
-                variant="ghost"
-                className="w-full"
-                onClick={() => {
-                  handleModelChange(model);
-                }}
+                  disabled={isLoading}
+                  variant="outline"
+                  role="combobox"
+                  aria-expanded={open}
+                  className="w-[300px] justify-between"
               >
-                {model}
+                {currentModel || "Select model"}
+                <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50"/>
               </Button>
-            ))
-          ) : (
-            <Button variant="ghost" disabled className=" w-full">
-              No models available
-            </Button>
-          )}
-        </PopoverContent>
-      </Popover>
-    </div>
+            </PopoverTrigger>
+            <PopoverContent className="w-[300px] p-1">
+              {models.length > 0 ? (
+                  models.map((model) => (
+                      <Button
+                          key={model}
+                          variant="ghost"
+                          className="w-full"
+                          onClick={() => {
+                            handleModelChange(model);
+                          }}
+                      >
+                        {model}
+                      </Button>
+                  ))
+              ) : (
+                  <Button variant="ghost" disabled className=" w-full">
+                    No models available
+                  </Button>
+              )}
+            </PopoverContent>
+          </Popover>
+          <img
+              src="/logo.png"
+              alt="Top Right Image"
+              className="w-35 h-10 object-cover rounded"
+          />
+        </div>
+      </div>
+
   );
 }

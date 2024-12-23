@@ -175,7 +175,7 @@ export default function Home() {
         />
         <DialogContent className="flex flex-col space-y-4">
           <DialogHeader className="space-y-2">
-            <DialogTitle>Welcome to cr8AI!</DialogTitle>
+            <DialogTitle>Welcome to REKTIFIED!</DialogTitle>
             <DialogDescription  >
               Let&apos;s connect the wallet
             </DialogDescription>
