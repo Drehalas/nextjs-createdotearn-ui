@@ -1,6 +1,6 @@
-# Cr8AI
+# REKTIFIED
 
-Cr8AI is an innovative web application designed to simplify stablecoins and amplify rewards, offering a seamless and secure user experience for cryptocurrency enthusiasts.
+REKTIFIED is an innovative web application designed to simplify stablecoins and amplify rewards, offering a seamless and secure user experience for cryptocurrency enthusiasts.
 
 ## Features
 
