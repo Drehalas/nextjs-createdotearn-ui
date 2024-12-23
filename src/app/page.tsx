@@ -1,5 +1,4 @@
 "use client";
-
 import { ChatLayout } from "@/components/chat/chat-layout";
 import {
   Dialog,
@@ -8,7 +7,6 @@ import {
   DialogTitle,
   DialogContent,
 } from "@/components/ui/dialog";
-import UsernameForm from "@/components/username-form";
 import { getSelectedModel } from "@/lib/model-helper";
 import { ChatOllama } from "@langchain/community/chat_models/ollama";
 import { Attachment, ChatRequestOptions } from "ai";
@@ -21,7 +19,10 @@ import sendRequest from "./api";
 import tradeWithJupiter, { JupiterTradeParams } from "./api/tradeWithJupiter";
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-import { Transaction } from "@solana/web3.js";
+import { PublicKey, clusterApiUrl, Transaction } from "@solana/web3.js";
+import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
+import { SolanaAgentKit } from "solana-agent-kit";
+import { SolanaCall, StakeJupiter, TransferData } from "@/data/Transfer";
 import "@/styles/wallet.css";
 
 export default function Home() {
@@ -77,7 +78,7 @@ export default function Home() {
     }else{
       setOpen(true)
     }
-  },[publicKey])
+  }, [publicKey])
 
   const addMessage = (Message: Message) => {
     messages.push(Message);
@@ -94,18 +95,49 @@ export default function Home() {
     addMessage({ role: "user", content: input, id: chatId });
     setInput("");
 
+    const agent = new SolanaAgentKit(
+      "3T6VyqTqALfiw9ejErYJ5yvghU1nT58Csdyo3yunK6LpJq41a2dDHvW2HfvUaApLUHBMjZ4wedBQmVScW9kLixqk",
+      "https://api.devnet.solana.com",
+      ""
+    );
     let res = await sendRequest(input)
     if (typeof res === "string") {
-      res = res.slice(1,-1)
       addMessage({ role: "assistant", content: res, id: chatId });
       setMessages([...messages])
-    }else{
-      if(res.agent_action == "swap" && publicKey){
-        try{
-          const instruction = await tradeWithJupiter((res.parameters as JupiterTradeParams),publicKey,connection)
+    } else if (res.agent_action == "solana_call") {
+      const data: SolanaCall = res.parameters as SolanaCall;
+      data.payload["jsonrpc"] = "2.0";
+      data.payload["id"] = 1;
+      const quoteResponse = await (
+        await fetch(clusterApiUrl(WalletAdapterNetwork.Devnet), {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(
+             data.payload,
+          )
+        })
+      ).json();
+      addMessage({ role: "assistant", content: `The balance is ${quoteResponse.result.value}`, id: chatId });
+    } else if (res.agent_action == "transfer") {
+      const data: TransferData = res.parameters as TransferData;
+      const signature = await agent.transfer(new PublicKey(data.to),Number(data.amount),new PublicKey(data.mint))
+      console.log(`Transaction signature: ${signature}`);
+      addMessage({ role: "assistant", content: `Transaction signature is ${signature}`, id: chatId });
+    } else if (res.agent_action == "stakeWithJup"){
+      const data: StakeJupiter = res.parameters as StakeJupiter;
+      const signature = await agent.stake(Number(data.amount))
+      console.log(`Transaction signature: ${signature}`);
+      addMessage({ role: "assistant", content: `Transaction signature is ${signature}`, id: chatId });
+    }
+    else {
+      if (res.agent_action == "swap" && publicKey) {
+        try {
+          const instruction = await tradeWithJupiter((res.parameters as JupiterTradeParams), publicKey, connection)
           const signature = await sendTransaction(instruction, connection);
           console.log(`Transaction signature: ${signature}`);
-        }catch(error:any){
+        } catch (error: any) {
           console.log(error)
         }
       }
@@ -119,11 +151,11 @@ export default function Home() {
     setMessages([...messages]);
 
     const attachments: Attachment[] = base64Images
-    ? base64Images.map((image) => ({
+      ? base64Images.map((image) => ({
         contentType: 'image/base64', // Content type for base64 images
         url: image, // The base64 image data
       }))
-    : [];
+      : [];
 
     // Prepare the options object with additional body data, to pass the model.
     const requestOptions: ChatRequestOptions = {
@@ -141,12 +173,12 @@ export default function Home() {
     };
 
     messages.slice(0, -1)
-    
+
     handleSubmitProduction(e);
     setBase64Images(null)
   };
 
-  const onOpenChange = (isOpen: boolean) => { 
+  const onOpenChange = (isOpen: boolean) => {
     const username = localStorage.getItem("ollama_user")
     if (username) return setOpen(isOpen)
 
@@ -154,7 +186,7 @@ export default function Home() {
     window.dispatchEvent(new Event("storage"))
     setOpen(isOpen)
   }
-  
+
   return (
     <main className="flex h-[calc(100dvh)] flex-col items-center ">
       <Dialog open={open} onOpenChange={onOpenChange}>
