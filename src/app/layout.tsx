@@ -8,8 +8,8 @@ import AppWalletProvider from "./appWalletProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-    title: "Cr8AI",
-    description: "Cr8AI\nStablecoins simplified.\nRewards amplified.",
+    title: "REKTIFIED",
+    description: "REKTIFIED\nStablecoins simplified.\nRewards amplified.",
     icons: {
         icon: "/favicon.ico", // Favicon file
         shortcut: "/favicon.ico", // Shortcut icon for browsers
