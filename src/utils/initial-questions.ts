@@ -1,35 +1,35 @@
 export const INITIAL_QUESTIONS = [
   {
-    content: "What is the capital of France?",
+    content: "Can you transfer 2 SOL to this wallet address?",
   },
   {
-    content: 'Who wrote "To Kill a Mockingbird"?',
+    content: "Can you trade 2 SOL for USDC using Jupiter?",
   },
   {
-    content: "What is the boiling point of water in Celsius?",
+    content: "Can you stake 30 USDC from my wallet?",
   },
   {
-    content: "How many planets are there in our solar system?",
+    content: "Can you show me my current wallet balance?",
   },
   {
-    content: "What year did the Titanic sink?",
+    content: "How can I bridge my USDC to other blockchains?",
   },
   {
-    content: "Who painted the Mona Lisa?",
+    content: "How can I stake USDC to start earning rewards?",
   },
   {
-    content: "What is the square root of 144?",
+    content: "How do I convert USDC into fiat currencies like Lira, Dollars, or Euros?",
   },
   {
-    content: "Who is the current President of the United States?",
+    content: "I need emotional support regarding crypto market",
   },
   {
-    content: "What is the tallest mountain in the world?",
+    content: "What do you think about Solana Bull Run?",
   },
   {
-    content: "What is the chemical symbol for gold?",
+    content: "What do you think of SendAI?",
   },
   {
-    content: "Who discovered penicillin?",
+    content: "What do you think of Assisterr?",
   },
 ];
