@@ -95,9 +95,9 @@ export default function ChatTopbar({
         </Sheet>
         <div className="ml-auto flex items-center space-x-4">
           <img
-              src="/logo.png"
+              src="/createai.png"
               alt="Top Right Image"
-              className="w-35 h-10 object-cover rounded"
+              className="w-45 h-20 object-cover rounded"
           />
         </div>
       </div>

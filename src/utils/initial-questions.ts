@@ -1,6 +1,6 @@
 export const INITIAL_QUESTIONS = [
   {
-    content: "Can you transfer 2 SOL to this wallet address?",
+    content: "  Can you transfer 2 SOL to this wallet address?",
   },
   {
     content: "Can you trade 2 SOL for USDC using Jupiter?",
